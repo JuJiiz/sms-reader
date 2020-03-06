@@ -15,10 +15,11 @@ class HomeUI extends StatefulWidget {
 class _HomeUIState extends State<HomeUI> {
   final bloc = new HomeBloc();
 
-@override
+  @override
   void initState() {
     super.initState();
     bloc.getAllSMS();
+    bloc.retrieveAllSMS();
   }
 
   @override

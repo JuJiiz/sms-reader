@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:rxdart/rxdart.dart';
 import 'package:sms/sms.dart';
 import 'package:sms_reader/src/data/repository.dart';
@@ -9,7 +11,15 @@ class HomeBloc {
 
   Observable<List<SmsMessage>> get smsObservable => _smsFetcher.stream;
 
-  getAllSMS() async { 
+  retrieveAllSMS() {
+    repo.retrieveAllSMS().listen((SmsMessage sms) {
+      log("sms sender: ${sms.sender} | address: ${sms.address} | body: ${sms.body}");
+
+      getAllSMS();
+    });
+  }
+
+  getAllSMS() async {
     var messages = await repo.getAllSMS();
     _smsFetcher.sink.add(messages);
   }
