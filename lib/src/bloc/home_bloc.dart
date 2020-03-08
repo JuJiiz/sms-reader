@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:sms/sms.dart';
 import 'package:sms_reader/src/data/repository.dart';
+import 'package:wakelock/wakelock.dart';
 
 class HomeBloc {
   final repo = new Repository();
@@ -13,27 +15,24 @@ class HomeBloc {
   Observable<List<SmsMessage>> get smsObservable => _smsFetcher.stream;
 
   retrieveAllSMS() {
-    repo.retrieveAllSMS().listen((SmsMessage sms) {
-      log("sms sender: ${sms.sender} | address: ${sms.address} | body: ${sms.body}");
+    repo.retrieveAllSMS().listen((SmsMessage sms) async {
+      Wakelock.enable();
+      log("sms sender: ${sms.sender} | address: ${sms.address} | body: ${sms.body} | date_send: ${sms.dateSent}");
 
       var bodyField = {
         'body': sms.body,
         'sender': sms.sender,
+        'address': sms.address,
+        'phone_name': 'test-phone',
+        'date_send': sms.dateSent.toString(),
       };
 
-      final url = Uri.https('dummy.url', 'dummy/path');
+      final url = Uri.https('hengjung.com', 'api-sms/index.php');
       final request = http.Request('POST', url);
-      /*if (body != null) {
-        request.body = body;
-      }*/
-      if (bodyField != null) {
-        request.bodyFields = bodyField;
-      }
-      /*if (headers != null) {
-        request.headers.addAll(headers);
-      }*/
-      request.send();
-
+      request.body = jsonEncode(bodyField);
+      var res = await request.send();
+      var resStr = await res.stream.bytesToString();
+      print("res -> ${res.statusCode}, res: $resStr");
       getAllSMS();
     });
   }
