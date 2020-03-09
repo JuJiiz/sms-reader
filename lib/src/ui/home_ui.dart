@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/sms.dart';
 import 'package:sms_reader/src/bloc/home_bloc.dart';
+import 'package:sms_reader/src/ui/phone_name_dialog.dart';
 import 'package:sms_reader/src/ui/widget/sms_list.dart';
 
 class HomeUI extends StatefulWidget {
@@ -13,35 +15,54 @@ class HomeUI extends StatefulWidget {
 }
 
 class _HomeUIState extends State<HomeUI> {
-  final bloc = new HomeBloc();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _bloc = new HomeBloc();
 
   @override
   void initState() {
     super.initState();
-    bloc.getAllSMS();
-    bloc.retrieveAllSMS();
+
+    _checkPhoneName();
   }
 
-  /*_checkPhoneName() async{
+  _checkPhoneName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getInt('counter')
-
-  }*/
+    var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
+    if (phoneName == null) {
+      showDialog(
+          context: _scaffoldKey.currentContext,
+          barrierDismissible: false,
+          builder: (context) => WillPopScope(
+                onWillPop: () => Future.value(false),
+                child: PhoneNameDialog(
+                  onSavePhoneName: (name) async {
+                    await prefs.setString('PHONE_NAME_PREF_KEY', name);
+                    _bloc.getAllSMS();
+                    _bloc.retrieveAllSMS();
+                  },
+                ),
+              ));
+    } else {
+      _bloc.getAllSMS();
+      _bloc.retrieveAllSMS();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(title: Text(widget.title)),
       body: Container(
         child: StreamBuilder(
-          stream: bloc.smsObservable,
+          stream: _bloc.smsObservable,
           builder:
               (BuildContext context, AsyncSnapshot<List<SmsMessage>> snapshot) {
-            if (snapshot.hasData) {
-              return SMSList(snapshot.data);
-            } else {
-              return SizedBox();
-            }
+            final sms = snapshot.data ?? [];
+            return RefreshIndicator(
+              onRefresh: () => _bloc.getAllSMS(),
+              child: SMSList(sms),
+            );
           },
         ),
       ),
