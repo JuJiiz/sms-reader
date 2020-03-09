@@ -35,7 +35,7 @@ class SMSList extends StatelessWidget {
                   'body': message.body,
                   'sender': message.sender,
                   'address': message.address,
-                  'phone_name': 'test-phone',
+                  'phone_name': 'phoneA',
                   'date_send': message.dateSent.toString(),
                 };
 

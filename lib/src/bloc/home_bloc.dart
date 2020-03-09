@@ -23,7 +23,7 @@ class HomeBloc {
         'body': sms.body,
         'sender': sms.sender,
         'address': sms.address,
-        'phone_name': 'test-phone',
+        'phone_name': 'phoneA',
         'date_send': sms.dateSent.toString(),
       };
 
