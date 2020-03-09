@@ -22,6 +22,12 @@ class _HomeUIState extends State<HomeUI> {
     bloc.retrieveAllSMS();
   }
 
+  /*_checkPhoneName() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getInt('counter')
+
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
