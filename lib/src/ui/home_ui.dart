@@ -29,30 +29,59 @@ class _HomeUIState extends State<HomeUI> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
     if (phoneName == null) {
-      showDialog(
-          context: _scaffoldKey.currentContext,
-          barrierDismissible: false,
-          builder: (context) => WillPopScope(
-                onWillPop: () => Future.value(false),
-                child: PhoneNameDialog(
-                  onSavePhoneName: (name) async {
-                    await prefs.setString('PHONE_NAME_PREF_KEY', name);
-                    _bloc.getAllSMS();
-                    _bloc.retrieveAllSMS();
-                  },
-                ),
-              ));
+      _showPhoneNameDialog(false, (name) async {
+        await prefs.setString('PHONE_NAME_PREF_KEY', name);
+        _bloc.getAllSMS();
+        _bloc.retrieveAllSMS();
+      });
     } else {
       _bloc.getAllSMS();
       _bloc.retrieveAllSMS();
     }
   }
 
+  _setPhoneName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
+
+    _showPhoneNameDialog(true,
+        (name) async => await prefs.setString('PHONE_NAME_PREF_KEY', name),
+        currentPhoneName: phoneName);
+  }
+
+  _showPhoneNameDialog(bool cancelable, Function(String) action,
+      {String currentPhoneName}) async {
+    showDialog(
+      context: _scaffoldKey.currentContext,
+      barrierDismissible: cancelable,
+      builder: (context) => cancelable
+          ? PhoneNameDialog(
+              onSavePhoneName: action,
+              currentPhoneName: currentPhoneName,
+            )
+          : WillPopScope(
+              onWillPop: () => Future.value(false),
+              child: PhoneNameDialog(
+                onSavePhoneName: action,
+                currentPhoneName: currentPhoneName,
+              ),
+            ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => _setPhoneName(),
+          )
+        ],
+      ),
       body: Container(
         child: StreamBuilder(
           stream: _bloc.smsObservable,

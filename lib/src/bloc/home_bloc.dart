@@ -16,12 +16,11 @@ class HomeBloc {
   Observable<List<SmsMessage>> get smsObservable => _smsFetcher.stream;
 
   retrieveAllSMS() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     repo.retrieveAllSMS().listen((SmsMessage sms) async {
       Wakelock.enable();
       log("sms sender: ${sms.sender} | address: ${sms.address} | body: ${sms.body} | date_send: ${sms.dateSent}");
 
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
 
       var bodyField = {

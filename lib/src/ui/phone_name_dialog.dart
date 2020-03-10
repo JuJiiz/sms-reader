@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PhoneNameDialog extends StatefulWidget {
+  final String currentPhoneName;
   final Function(String) onSavePhoneName;
 
-  const PhoneNameDialog({Key key, this.onSavePhoneName}) : super(key: key);
+  const PhoneNameDialog({Key key, this.onSavePhoneName, this.currentPhoneName})
+      : super(key: key);
 
   @override
   _PhoneNameDialogState createState() => _PhoneNameDialogState();
@@ -11,6 +13,13 @@ class PhoneNameDialog extends StatefulWidget {
 
 class _PhoneNameDialogState extends State<PhoneNameDialog> {
   final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.currentPhoneName != null)
+      controller.text = widget.currentPhoneName;
+  }
 
   @override
   Widget build(BuildContext context) {
