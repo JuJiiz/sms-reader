@@ -31,7 +31,8 @@ class HomeBloc {
         'date_send': sms.dateSent.toString(),
       };
 
-      final url = Uri.https('hengjung.com', 'api-sms/index.php');
+      //TODO
+      final url = Uri.https('hengjung.com', 'api-sms/test.php');
       final request = http.Request('POST', url);
       request.body = jsonEncode(bodyField);
       var res = await request.send();
