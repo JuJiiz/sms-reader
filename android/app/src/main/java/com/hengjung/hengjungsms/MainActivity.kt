@@ -12,7 +12,7 @@ class MainActivity : FlutterActivity() {
 
         Notifications.createNotificationChannels(this)
 
-        MethodChannel(flutterView, "com.example/background_service").apply {
+        MethodChannel(flutterView, "com.hengjung/background_service").apply {
             setMethodCallHandler { method, result ->
                 if (method.method == "startService") {
                     val callbackRawHandle = method.arguments as Long
@@ -24,7 +24,7 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        MethodChannel(flutterView, "com.example/app_retain").apply {
+        MethodChannel(flutterView, "com.hengjung/app_retain").apply {
             setMethodCallHandler { method, result ->
                 if (method.method == "sendToBackground") {
                     moveTaskToBack(true)

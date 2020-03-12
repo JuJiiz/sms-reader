@@ -1,7 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:sms_reader/src/ui/home_ui.dart';
+import 'dart:ui';
 
-void main() => runApp(MyApp());
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sms_reader/src/background_main.dart';
+import 'package:sms_reader/src/ui/home_ui.dart';
+import 'package:sms_reader/src/ui/widget/app_retain_widget.dart';
+
+void main() {
+  runApp(MyApp());
+
+  var channel = const MethodChannel('com.hengjung/background_service');
+  var callbackHandle = PluginUtilities.getCallbackHandle(backgroundMain);
+  channel.invokeMethod('startService', callbackHandle.toRawHandle());
+
+  //CounterService().startCounting();
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -12,7 +25,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeUI(title: 'Home'),
+      home: AppRetainWidget(
+        child: HomeUI(title: 'Home'),
+      ),
     );
   }
 }
