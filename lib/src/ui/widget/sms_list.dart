@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/sms.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -26,6 +27,8 @@ class SMSList extends StatelessWidget {
               Text(message.dateSent.toString()),
               RaisedButton(
                 onPressed: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
                   bool isEnabled = await Wakelock.isEnabled;
                   if (!isEnabled) {
                     Wakelock.enable();
@@ -36,7 +39,7 @@ class SMSList extends StatelessWidget {
                     'body': message.body,
                     'sender': message.sender,
                     'address': message.address,
-                    'phone_name': 'phoneA',
+                    'phone_name': phoneName,
                     'date_send': message.dateSent.toString(),
                   };
 
