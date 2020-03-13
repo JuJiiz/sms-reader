@@ -29,8 +29,8 @@ object Notifications {
         return NotificationCompat
                 .Builder(context, CHANNEL_ID_BACKGROUND_SERVICE)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Background Service")
-                .setContentText("Keeps app process on foreground.")
+                .setContentTitle("Hengjung SMS")
+                .setContentText("โปรแกรมกำลังทำงาน กรุณาอย่าปิดโปรแกรม.")
                 .build()
     }
 }
