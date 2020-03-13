@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: AppRetainWidget(
-        child: HomeUI(title: 'Home'),
+        child: HomeUI(title: 'Hengjung SMS'),
       ),
     );
   }
