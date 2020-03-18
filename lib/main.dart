@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:sms_reader/src/background_main.dart';
 import 'package:sms_reader/src/ui/home_ui.dart';
 import 'package:sms_reader/src/ui/widget/app_retain_widget.dart';
+import 'package:wakelock/wakelock.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,6 +15,7 @@ void main() {
   channel.invokeMethod('startService', callbackHandle.toRawHandle());
 
   //CounterService().startCounting();
+  Wakelock.enable();
 }
 
 class MyApp extends StatelessWidget {

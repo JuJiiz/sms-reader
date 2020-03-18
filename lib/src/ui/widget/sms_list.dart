@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/sms.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -23,7 +24,6 @@ class SMSList extends StatelessWidget {
               Text(message.address),
               Text(message.body),
               Text(message.date.toString()),
-              Text(message.dateSent.toString()),
               RaisedButton(
                 onPressed: () async {
                   bool isEnabled = await Wakelock.isEnabled;
@@ -32,16 +32,18 @@ class SMSList extends StatelessWidget {
                   }
                   print(
                       "-> -> sms sender: ${message.sender} | address: ${message.address} | body: ${message.body} | date_send: ${message.dateSent}");
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
                   var bodyField = {
                     'body': message.body,
                     'sender': message.sender,
                     'address': message.address,
-                    'phone_name': 'phoneA',
-                    'date_send': message.dateSent.toString(),
+                    'phone_name': phoneName,
+                    'date_send': message.date.toString(),
                   };
 
                   //TODO
-                  final url = Uri.https('hengjung.com', 'api-sms/test.php');
+                  final url = Uri.https('hengjung.com', 'api-sms/index.php');
                   final request = http.Request('POST', url);
                   request.body = jsonEncode(bodyField);
                   /*if (headers != null) {
