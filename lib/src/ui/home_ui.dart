@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms/sms.dart';
 import 'package:sms_reader/src/bloc/home_bloc.dart';
 import 'package:sms_reader/src/ui/phone_name_dialog.dart';
 import 'package:sms_reader/src/ui/widget/sms_list.dart';
+import 'package:sms_reader/src/data/sms_provider.dart';
+import 'package:http/http.dart' as http;
 
 class HomeUI extends StatefulWidget {
   HomeUI({Key key, this.title}) : super(key: key);
@@ -69,6 +73,42 @@ class _HomeUIState extends State<HomeUI> {
     );
   }
 
+  _reSendAllUnReadSms() async {
+    final smsProvider = new SMSProvider();
+    var smsList = await smsProvider.getUnRead();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
+    var listBody = [];
+    for (var sms in smsList) {
+      var bodyField = {
+        'body': sms.body,
+        'sender': sms.sender,
+        'address': sms.address,
+        'phone_name': phoneName,
+        'date': sms.date.toString(),
+        'date_send': sms.dateSent.toString(),
+      };
+      listBody.add(bodyField);
+    }
+    print(listBody);
+    final url = Uri.https('hengjung.com', 'api-sms/recheck.php');
+    final request = http.Request('POST', url);
+    request.body = jsonEncode(listBody);
+    var res = await request.send();
+    var resStr = await res.stream.bytesToString();
+    print("res -> ${res.statusCode}, res: $resStr");
+    var txtRes = "ส่งข้อความไปเช็คเรียบร้อยแล้ว";
+    if (res.statusCode != 200) {
+      txtRes = "ส่งข้อมูลไม่สำเร็จ";
+    }
+
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text(txtRes),
+        duration: Duration(seconds: 5),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +116,9 @@ class _HomeUIState extends State<HomeUI> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.autorenew), onPressed: () => _reSendAllUnReadSms(),
+          ),
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () => _setPhoneName(),

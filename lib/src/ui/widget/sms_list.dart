@@ -14,7 +14,7 @@ class SMSList extends StatelessWidget {
 
   SMSList(this.messages);
 
-  Widget smsListItem(SmsMessage message) {
+  Widget smsListItem(SmsMessage message, BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -24,7 +24,6 @@ class SMSList extends StatelessWidget {
               Text(message.address),
               Text(message.body),
               Text(message.date.toString()),
-              Text(message.dateSent.toString()),
               RaisedButton(
                 onPressed: () async {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,10 +39,11 @@ class SMSList extends StatelessWidget {
                     'sender': message.sender,
                     'address': message.address,
                     'phone_name': phoneName,
-                    'date_send': message.dateSent.toString(),
+                    'date_send': message.date.toString(),
                   };
 
-                  final url = Uri.https('hengjung.com', 'api-sms/test.php');
+                  //TODO
+                  final url = Uri.https('hengjung.com', 'api-sms/index.php');
                   final request = http.Request('POST', url);
                   request.body = jsonEncode(bodyField);
                   /*if (headers != null) {
@@ -52,6 +52,14 @@ class SMSList extends StatelessWidget {
                   var res = await request.send();
                   var resStr = await res.stream.bytesToString();
                   print("res -> ${res.statusCode}, res: $resStr");
+                  var txtRes = "ส่งข้อความเรียบร้อยแล้ว";
+                  if (res.statusCode != 200) {
+                    txtRes = "ส่งข้อมูลไม่สำเร็จ";
+                  }
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(txtRes),
+                    duration: Duration(seconds: 5),
+                  ));
                 },
                 child: Text('Send Api'),
               )
@@ -68,7 +76,7 @@ class SMSList extends StatelessWidget {
     return ListView.builder(
       itemCount: messages.length,
       itemBuilder: (BuildContext context, int index) =>
-          smsListItem(messages[index]),
+          smsListItem(messages[index], context),
     );
   }
 }
