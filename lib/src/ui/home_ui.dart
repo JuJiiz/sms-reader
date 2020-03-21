@@ -90,7 +90,7 @@ class _HomeUIState extends State<HomeUI> {
       };
       listBody.add(bodyField);
     }
-
+    print(listBody);
     final url = Uri.https('hengjung.com', 'api-sms/recheck.php');
     final request = http.Request('POST', url);
     request.body = jsonEncode(listBody);
@@ -105,7 +105,7 @@ class _HomeUIState extends State<HomeUI> {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
         content: Text(txtRes),
-        duration: Duration(seconds: 4),
+        duration: Duration(seconds: 5),
     ));
   }
 
