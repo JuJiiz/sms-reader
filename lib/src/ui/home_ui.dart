@@ -91,7 +91,7 @@ class _HomeUIState extends State<HomeUI> {
       listBody.add(bodyField);
     }
     print(listBody);
-    final url = Uri.https('hengjung.com', 'api-sms/recheck.php');
+    final url = Uri.https('hengjung.com', 'api/sms/recheck.php');
     final request = http.Request('POST', url);
     request.body = jsonEncode(listBody);
     var res = await request.send();
