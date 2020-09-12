@@ -32,14 +32,15 @@ class SMSList extends StatelessWidget {
                   if (!isEnabled) {
                     Wakelock.enable();
                   }
-                  print(
-                      "-> -> sms sender: ${message.sender} | address: ${message.address} | body: ${message.body} | date_send: ${message.dateSent}");
+                  // print(
+                  //     "-> -> sms sender: ${message.sender} | address: ${message.address} | body: ${message.body} | date_send: ${message.dateSent}");
                   var bodyField = {
                     'body': message.body,
                     'sender': message.sender,
                     'address': message.address,
                     'phone_name': phoneName,
                     'date_send': message.date.toString(),
+                    'domain_name': 'heng108_1',
                   };
 
                   //TODO

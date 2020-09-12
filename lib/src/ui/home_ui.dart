@@ -87,11 +87,12 @@ class _HomeUIState extends State<HomeUI> {
         'phone_name': phoneName,
         'date': sms.date.toString(),
         'date_send': sms.dateSent.toString(),
+        'domain_name': 'heng108_1',
       };
       listBody.add(bodyField);
     }
     print(listBody);
-    final url = Uri.https('hengjung.com', 'api/sms/recheck.php');
+    final url = Uri.https('heng108.com', 'api/sms/recheck.php');
     final request = http.Request('POST', url);
     request.body = jsonEncode(listBody);
     var res = await request.send();

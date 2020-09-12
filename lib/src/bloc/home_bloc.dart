@@ -29,6 +29,7 @@ class HomeBloc {
         'address': sms.address,
         'phone_name': phoneName,
         'date_send': sms.date.toString(),
+        'domain_name': 'heng108_1',
       };
 
       //TODO
