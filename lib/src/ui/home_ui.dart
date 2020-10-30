@@ -87,6 +87,7 @@ class _HomeUIState extends State<HomeUI> {
         'phone_name': phoneName,
         'date': sms.date.toString(),
         'date_send': sms.dateSent.toString(),
+        'domain_name': 'hengjung',
       };
       listBody.add(bodyField);
     }
