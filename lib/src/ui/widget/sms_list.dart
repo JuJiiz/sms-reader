@@ -40,11 +40,11 @@ class SMSList extends StatelessWidget {
                     'address': message.address,
                     'phone_name': phoneName,
                     'date_send': message.date.toString(),
-                    'domain_name': 'heng108_1',
+                    'domain_name': 'hengjung',
                   };
 
                   //TODO
-                  final url = Uri.https('heng108.com', 'api/sms/index.php');
+                  final url = Uri.https('hengjung.com', 'api-sms/index.php');
                   final request = http.Request('POST', url);
                   request.body = jsonEncode(bodyField);
                   /*if (headers != null) {
