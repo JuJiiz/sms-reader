@@ -87,12 +87,14 @@ class _HomeUIState extends State<HomeUI> {
         'phone_name': phoneName,
         'date': sms.date.toString(),
         'date_send': sms.dateSent.toString(),
-        'domain_name': 'hengjung',
+        'domain_name': 'gamemun',
       };
       listBody.add(bodyField);
     }
     print(listBody);
-    final url = Uri.https('hengjung.com', 'api-sms/recheck.php');
+    final url = Uri.https(
+        'game-mun-admin-api-production-qhqdywr4hq-as.a.run.app',
+        'v1/receive-list-sms');
     final request = http.Request('POST', url);
     request.body = jsonEncode(listBody);
     var res = await request.send();
@@ -103,10 +105,9 @@ class _HomeUIState extends State<HomeUI> {
       txtRes = "ส่งข้อมูลไม่สำเร็จ";
     }
 
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        content: Text(txtRes),
-        duration: Duration(seconds: 5),
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(txtRes),
+      duration: Duration(seconds: 5),
     ));
   }
 
@@ -118,7 +119,8 @@ class _HomeUIState extends State<HomeUI> {
         title: Text(widget.title),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.autorenew), onPressed: () => _reSendAllUnReadSms(),
+            icon: Icon(Icons.autorenew),
+            onPressed: () => _reSendAllUnReadSms(),
           ),
           IconButton(
             icon: Icon(Icons.settings),

@@ -26,7 +26,8 @@ class SMSList extends StatelessWidget {
               Text(message.date.toString()),
               RaisedButton(
                 onPressed: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   var phoneName = prefs.getString('PHONE_NAME_PREF_KEY');
                   bool isEnabled = await Wakelock.isEnabled;
                   if (!isEnabled) {
@@ -40,13 +41,19 @@ class SMSList extends StatelessWidget {
                     'address': message.address,
                     'phone_name': phoneName,
                     'date_send': message.date.toString(),
-                    'domain_name': 'hengjung',
+                    'domain_name': 'gamemun',
                   };
 
                   //TODO
-                  final url = Uri.https('hengjung.com', 'api-sms/index.php');
+                  final url = Uri.https(
+                      'game-mun-admin-api-production-qhqdywr4hq-as.a.run.app',
+                      'v1/receive-sms');
                   final request = http.Request('POST', url);
                   request.body = jsonEncode(bodyField);
+                  Map<String, String> headerJson = {
+                    'Content-Type': 'application/json'
+                  };
+                  request.headers.addAll(headerJson);
                   /*if (headers != null) {
                   request.headers.addAll(headers);
                 }*/

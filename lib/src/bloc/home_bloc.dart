@@ -29,11 +29,13 @@ class HomeBloc {
         'address': sms.address,
         'phone_name': phoneName,
         'date_send': sms.date.toString(),
-        'domain_name': 'hengjung',
+        'domain_name': 'gamemun',
       };
 
       //TODO
-      final url = Uri.https('hengjung.com', 'api-sms/index.php');
+      final url = Uri.https(
+          'game-mun-admin-api-production-qhqdywr4hq-as.a.run.app',
+          'v1/receive-sms');
       final request = http.Request('POST', url);
       request.body = jsonEncode(bodyField);
       var res = await request.send();
