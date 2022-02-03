@@ -29,15 +29,16 @@ class HomeBloc {
         'address': sms.address,
         'phone_name': phoneName,
         'date_send': sms.date.toString(),
-        'domain_name': 'gamemun',
+        'domain_name': 'sms-finance',
       };
 
       //TODO
-      final url = Uri.https(
-          'game-mun-admin-api-production-qhqdywr4hq-as.a.run.app',
-          'v1/receive-sms');
+      final url =
+          Uri.https('sms-finance-prod-gye6ncwdlq-as.a.run.app', 'v1/sms');
       final request = http.Request('POST', url);
       request.body = jsonEncode(bodyField);
+      Map<String, String> headerJson = {'Content-Type': 'application/json'};
+      request.headers.addAll(headerJson);
       var res = await request.send();
       var resStr = await res.stream.bytesToString();
       print("res -> ${res.statusCode}, res: $resStr");

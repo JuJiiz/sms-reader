@@ -87,16 +87,17 @@ class _HomeUIState extends State<HomeUI> {
         'phone_name': phoneName,
         'date': sms.date.toString(),
         'date_send': sms.dateSent.toString(),
-        'domain_name': 'gamemun',
+        'domain_name': 'sms-finance',
       };
       listBody.add(bodyField);
     }
     print(listBody);
-    final url = Uri.https(
-        'game-mun-admin-api-production-qhqdywr4hq-as.a.run.app',
-        'v1/receive-list-sms');
+    final url =
+        Uri.https('sms-finance-prod-gye6ncwdlq-as.a.run.app', 'v1/sms/resend');
     final request = http.Request('POST', url);
     request.body = jsonEncode(listBody);
+    Map<String, String> headerJson = {'Content-Type': 'application/json'};
+    request.headers.addAll(headerJson);
     var res = await request.send();
     var resStr = await res.stream.bytesToString();
     print("res -> ${res.statusCode}, res: $resStr");

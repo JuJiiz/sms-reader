@@ -41,13 +41,12 @@ class SMSList extends StatelessWidget {
                     'address': message.address,
                     'phone_name': phoneName,
                     'date_send': message.date.toString(),
-                    'domain_name': 'gamemun',
+                    'domain_name': 'sms-finance',
                   };
 
                   //TODO
                   final url = Uri.https(
-                      'game-mun-admin-api-production-qhqdywr4hq-as.a.run.app',
-                      'v1/receive-sms');
+                      'sms-finance-prod-gye6ncwdlq-as.a.run.app', 'v1/sms');
                   final request = http.Request('POST', url);
                   request.body = jsonEncode(bodyField);
                   Map<String, String> headerJson = {
